@@ -1,0 +1,1 @@
+wget -i nyc_taxi_data_urls.txt -P raw_data/ -w 2
