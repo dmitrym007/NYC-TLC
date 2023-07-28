@@ -4,9 +4,9 @@ The raw data of [the NYC Taxi and Limousine Commission](https://www.nyc.gov/site
 
 ### OS and installed packages
 
-Operating system version:
-Python 3.10 with package installed: Polars
-Clickhouse ([installation](https://clickhouse.com/docs/en/install))
+Operating system version: Ubuntu 22.04  
+Python 3.10 with Polars 0.18.7 library installed  
+Clickhouse 23.7 ([installation](https://clickhouse.com/docs/en/install))
 
 ### Download raw data
 
