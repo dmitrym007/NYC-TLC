@@ -83,57 +83,13 @@ CREATE TABLE nyc_tlc_data.taxi_trips (
 ENGINE = MergeTree
 ORDER BY (car_type, pickup_datetime);
 
-CREATE OR REPLACE VIEW nyc_tlc_data.fhv_trips_expanded AS
+CREATE OR REPLACE VIEW nyc_tlc_data.daily_weather_conditions AS
 SELECT
-  *,
-  trip_time / 60 AS trip_minutes,
-  trip_miles / trip_time * 3600 AS mph,
-  (
-    trip_miles >= 0.2
-    AND trip_miles < 50
-    AND trip_time >= 60
-    AND trip_time < 60 * 60 * 3
-    AND mph >= 1
-    AND mph < 100
-    AND base_passenger_fare >= 2
-    AND base_passenger_fare < 2000
-    AND driver_pay >= 1
-    AND driver_pay < 2000
-  ) AS reasonable_time_distance_fare,
-  (
-    shared_request = false
-    AND access_a_ride = false
-    AND wav_request = false
-  ) AS solo_non_special_request,
-  coalesce(tolls, 0) +
-    coalesce(black_car_fund, 0) +
-    coalesce(sales_tax, 0) +
-    coalesce(congestion_surcharge, 0) +
-    coalesce(airport_fee, 0) AS extra_charges
-FROM nyc_tlc_data.fhv_trips;
-
-CREATE OR REPLACE VIEW nyc_tlc_data.taxi_trips_expanded AS
-SELECT
-  *,
-  (dropoff_datetime - pickup_datetime) / 60 AS trip_minutes,
-  trip_distance / (dropoff_datetime - pickup_datetime) * 3600 AS mph,
-  (
-    trip_distance >= 0.2
-    AND trip_distance < 50
-    AND trip_minutes >= 1
-    AND trip_minutes < 180
-    AND mph >= 1
-    AND mph < 100
-    AND fare_amount >= 2
-    AND fare_amount < 2000
-    AND total_amount >= 2
-    AND total_amount < 2000
-  ) AS reasonable_time_distance_fare,
-  coalesce(extra, 0) +
-    coalesce(mta_tax, 0) +
-    coalesce(tolls_amount, 0) +
-    coalesce(improvement_surcharge, 0) +
-    coalesce(congestion_surcharge, 0) +
-    coalesce(airport_fee, 0) +
-    coalesce(ehail_fee, 0) AS extra_charges
-FROM nyc_tlc_data.taxi_trips;
+	observation_date,
+	precipitation * 2.54 AS prec_cm,
+	average_wind_speed * 16.09 / 36 AS avg_wind_ms,
+	snowfall * 2.54 * 10 AS snowfall_mm,
+	snow_depth * 2.54 * 10 AS snow_depth_mm,
+	(max_temperature -32) * 5 / 90 AS max_temperature_tenth_celsius,
+	(min_temperature -32) * 5 / 90 AS min_temperature_tenth_celsius
+FROM nyc_tlc_data.weather_observations;
