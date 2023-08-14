@@ -1,27 +1,30 @@
-# NYC Taxi and Limousine Commission
+# Поездки такси в Нью Йорке
 
-The raw data of [the NYC Taxi and Limousine Commission](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) and the summary of weather data in New York that comes from [National Climatic Data Center](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00094728/detail) are used to download, process and load in Clickhouse database to make some analysis.
+Данные для загрузки в Clickhouse и проведения некоторого анализа взяты с сайтов:
+- [данные по поездкам такси](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page);
+- [данные о погоде в Нью Йорке](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00094728/detail).
 
-### OS and installed packages
+### Для загрузки и проведения анализа использовались
 
-Operating system version: Ubuntu 22.04  
+ОС: Ubuntu 22.04  
 Python 3.10 with Polars 0.18.7 library installed  
 Clickhouse 23.7 ([installation](https://clickhouse.com/docs/en/install))
+Power BI Desktop Version: 2.119.666.0
 
-### Download raw data
+### Загрузка исходных данных
 
 `./download_nyc_taxi_data.sh`
 
-### Initialize database and set up schema
+### Инициализация базы данных и схемы
 
 `./initialize_database_schema.sh`
 
-### Load taxi zones and weather observation data
+### Загрузка данных о районах в Нью Йорке и данных о погоде
 
 `./load_weather_and_zones.sh`
 
 
-### Process parquet files in Python using Polars library and write in csv format in clickhouse user_files directory
+### Обработка файлов в форамате parquet и запись в csv формат для загрузки в clickhouse
 
 Process and write fhv_tripdata files  
 `python3 fhv_parquet_to_csv.py`
@@ -35,7 +38,7 @@ Process and write green_tripdata files
 Process and write yellow_tripdata files starting from 2011  
 `python3 yellow_from_2011_parquet_to_csv.py`
 
-### Load csv files to Clickhouse database
+### Загрузка csv файлов в базу данных clickhouse
 
 `./import_fhv.sh`  
 `./import_fhvhv.sh`  
