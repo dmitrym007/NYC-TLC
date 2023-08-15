@@ -12,5 +12,5 @@ FROM
 			) cal
 			LEFT OUTER JOIN 
 			nyc_tlc_data.daily_agg_data dad ON dad.trip_day = cal.cal_date
-	)
+)
 WHERE trip_day = cal_date;
